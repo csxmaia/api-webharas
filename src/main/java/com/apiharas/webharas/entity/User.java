@@ -15,7 +15,6 @@ import static javax.persistence.GenerationType.AUTO;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="user")
 public class User {
 
     @Id
@@ -43,8 +42,11 @@ public class User {
     @Column(nullable = false)
     private String whatsapp;
 
-    @Column(nullable = false)
-    private Long cidade_id;
+    @Column
+    private String endereco;
+
+    @ManyToOne
+    private Cidade cidade;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();

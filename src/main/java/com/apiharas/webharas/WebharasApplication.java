@@ -1,16 +1,11 @@
 package com.apiharas.webharas;
 
-import com.apiharas.webharas.entity.Role;
-import com.apiharas.webharas.entity.User;
-import com.apiharas.webharas.service.UserService;
-import org.springframework.boot.CommandLineRunner;
+import com.apiharas.webharas.interfaces.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.ArrayList;
 
 @SpringBootApplication
 public class WebharasApplication {
