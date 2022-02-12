@@ -1,19 +1,19 @@
 package com.apiharas.webharas.entity;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+
+import javax.persistence.*;
+
 import static javax.persistence.GenerationType.AUTO;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role {
+public class Ancestrais {
 
     @Id
     @GeneratedValue(strategy= AUTO)
@@ -22,7 +22,16 @@ public class Role {
     @Column(nullable = false)
     private String nome;
 
-//    Dados q não estão no banco
-    private String username;
-    private String roleName;
+    @Column(nullable = false)
+    private String descricao;
+
+    @Column
+    private Long ancestrais_mae_id;
+
+    @Column
+    private Long ancestrais_pai_id;
+
+    @OneToOne
+    private Linhagem linhagem;
+
 }

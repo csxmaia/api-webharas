@@ -10,14 +10,12 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pelagem {
+public class Habilidade {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
+    private String tipo;
 
-    @Column(nullable = false)
-    private String descricao;
 }

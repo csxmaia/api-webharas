@@ -6,18 +6,21 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.GenerationType.AUTO;
+
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pelagem {
+public class Imagem {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= AUTO)
     private Long id;
 
-    @Column(nullable = false)
-    private String nome;
+    @Column
+    private String url;
 
-    @Column(nullable = false)
-    private String descricao;
+    @ManyToOne
+    private Cavalo cavalo;
 }

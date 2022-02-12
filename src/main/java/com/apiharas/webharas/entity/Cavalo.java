@@ -1,17 +1,16 @@
 package com.apiharas.webharas.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.sql.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name="cavalo")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cavalo {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -21,40 +20,37 @@ public class Cavalo {
     private String nome;
 
     @Column(nullable = false)
-    private String preco;
+    private Double preco;
+
+    @ManyToOne
+    private Genero genero;
+
+    @ManyToOne
+    private Habilidade habilidade;
 
     @Column(nullable = false)
-    private Date dtnasc;
+    private Date data_nascimento;
 
     @Column(nullable = false)
     private String descricao;
 
-    @Column(nullable = false)
-    private Long genero_id;
+    @ManyToOne
+    private Cidade cidade;
 
-    @Column(nullable = false)
-    private Long habilidade_id;
+    @ManyToOne
+    private User user;
 
-    @Column(nullable = false)
-    private Long video_id;
+    @ManyToOne
+    private Linhagem linhagem;
 
-    @Column(nullable = false)
-    private Long cidade_id;
+    @ManyToOne
+    private Haras haras;
 
-    @Column(nullable = false)
-    private Long usuario_id;
+    @ManyToOne
+    private Raca raca;
 
-    @Column(nullable = false)
-    private Long linhagem_id;
-
-    @Column(nullable = false)
-    private Long haras_id;
-
-    @Column(nullable = false)
-    private Long raca_id;
-
-    @Column(nullable = false)
-    private Long pelagem_id;
+    @ManyToOne
+    private Pelagem pelagem;
 
     @Column(nullable = false)
     private Boolean vendido;
