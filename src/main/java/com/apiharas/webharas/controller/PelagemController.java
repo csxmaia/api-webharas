@@ -29,7 +29,7 @@ public class PelagemController {
         }
     }
 
-    @GetMapping("/pelagems")
+    @GetMapping("/pelagens")
     public ResponseEntity<List<Pelagem>> getPelagems() {
         try {
             return ResponseEntity.ok().body(pelagemService.getListItems());

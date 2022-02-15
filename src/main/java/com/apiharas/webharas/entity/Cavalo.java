@@ -31,7 +31,7 @@ public class Cavalo {
     @Column(nullable = false)
     private Date data_nascimento;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 3000)
     private String descricao;
 
     @ManyToOne
