@@ -11,4 +11,5 @@ public interface CavaloService {
     Optional<Cavalo> getCavaloById(Long idCavalo);
     void removeCavalo(Long cavalo);
     List<Cavalo> getCavalos();
+    List<Cavalo> getCavalos(Long cidade, Long genero, Long raca, Long pelagem);
 }

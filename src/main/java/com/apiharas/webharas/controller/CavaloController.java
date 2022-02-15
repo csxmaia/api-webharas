@@ -30,9 +30,18 @@ public class CavaloController {
     }
 
     @GetMapping("/cavalos")
-    public ResponseEntity<List<Cavalo>> getCavalos() {
+    public ResponseEntity<List<Cavalo>> getCavalos(
+        @RequestParam (required = false) Long cidade,
+        @RequestParam (required = false) Long genero,
+        @RequestParam (required = false) Long raca,
+        @RequestParam (required = false) Long pelagem
+    ) {
         try {
-            return ResponseEntity.ok().body(cavaloService.getCavalos());
+            if(cidade != null || genero != null || raca != null || pelagem != null) {
+                return ResponseEntity.ok().body(cavaloService.getCavalos(cidade, genero, raca, pelagem));
+            }else {
+                return ResponseEntity.ok().body(cavaloService.getCavalos());
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();

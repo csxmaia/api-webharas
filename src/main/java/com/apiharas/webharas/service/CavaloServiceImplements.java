@@ -47,4 +47,10 @@ public class CavaloServiceImplements implements CavaloService {
         log.info("Buscando cavalos");
         return cavaloRepository.findAll();
     }
+
+    @Override
+    public List<Cavalo> getCavalos(Long cidade, Long genero, Long raca, Long pelagem) {
+        log.info("Buscando cavalos");
+        return cavaloRepository.findByFilterParams(cidade, genero, raca, pelagem);
+    }
 }
