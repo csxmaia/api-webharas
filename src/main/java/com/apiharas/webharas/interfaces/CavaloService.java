@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface CavaloService {
 
-    Cavalo saveCavalo(Cavalo cavalo);
+    Cavalo saveCavalo(Cavalo cavalo, String authorizationHeader);
     Optional<Cavalo> getCavaloById(Long idCavalo);
     void removeCavalo(Long cavalo);
     List<Cavalo> getCavalos();

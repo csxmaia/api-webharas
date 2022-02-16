@@ -54,7 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/api/racas",
                 "/api/pelagens",
                 "/api/user/login",
-                "/api/cavalosByUser"
+                "/api/cavalosByUser",
+                "/api/habilidades"
         ).permitAll();
         http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAnyAuthority("ROLE_USER");
         http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");

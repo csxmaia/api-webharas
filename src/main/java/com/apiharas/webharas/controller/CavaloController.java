@@ -62,11 +62,12 @@ public class CavaloController {
         }
     }
 
-    @GetMapping("/cavalo/save")
-    public ResponseEntity<Cavalo> saveCavalo(@RequestBody Cavalo cavalo) {
+    @PostMapping("/cavalo/save")
+    public ResponseEntity<Cavalo> saveCavalo(@RequestBody Cavalo cavalo, HttpServletRequest request) {
         try {
+            String authorizationHeader = request.getHeader(AUTHORIZATION);
             URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/cavalo/save").toUriString());
-            return ResponseEntity.created(uri).body(cavaloService.saveCavalo(cavalo));
+            return ResponseEntity.created(uri).body(cavaloService.saveCavalo(cavalo, authorizationHeader));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();

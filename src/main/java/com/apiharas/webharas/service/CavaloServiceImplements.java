@@ -4,6 +4,7 @@ import com.apiharas.webharas.entity.Cavalo;
 import com.apiharas.webharas.entity.User;
 import com.apiharas.webharas.interfaces.CavaloService;
 import com.apiharas.webharas.repository.CavaloRepository;
+import com.apiharas.webharas.repository.ImagemRepository;
 import com.apiharas.webharas.repository.UserRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -23,10 +24,13 @@ import java.util.*;
 @Slf4j
 public class CavaloServiceImplements implements CavaloService {
     private final CavaloRepository cavaloRepository;
+    private final ImagemRepository imagemRepository;
     private final UserRepository userRepository;
 
     @Override
-    public Cavalo saveCavalo(Cavalo cavalo) {
+    public Cavalo saveCavalo(Cavalo cavalo, String authorizationHeader) {
+        User user = getUser(authorizationHeader);
+        cavalo.setUser(user);
         if (cavalo.getId() == null) {
             log.info("Salvando novo cavalo {} no banco de dados", cavalo.getNome());
             return cavaloRepository.save(cavalo);
@@ -63,18 +67,19 @@ public class CavaloServiceImplements implements CavaloService {
 
     @Override
     public List<Cavalo> getCavalosByUser(String authorizationHeader) {
+        User user = getUser(authorizationHeader);
+        List<Cavalo> cavalos = cavaloRepository.findByUserId(user.getId());
+        return cavalos;
+    }
+
+    private User getUser(String authorizationHeader) {
         String refresh_token = authorizationHeader.substring("Bearer ".length());
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
         JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT decodedJWT = verifier.verify(refresh_token);
         String username = decodedJWT.getSubject();
-        User user = getUser(username);
-        List<Cavalo> cavalos = cavaloRepository.findByUserId(user.getId());
-        return cavalos;
-    }
-
-    private User getUser(String userName) {
-        return userRepository.findByUsername(userName).get();
+        User user = userRepository.findByUsername(username).get();
+        return user;
     }
 
 }
