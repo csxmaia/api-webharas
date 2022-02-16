@@ -1,8 +1,14 @@
 package com.apiharas.webharas.service;
 
 import com.apiharas.webharas.entity.Cavalo;
+import com.apiharas.webharas.entity.User;
 import com.apiharas.webharas.interfaces.CavaloService;
 import com.apiharas.webharas.repository.CavaloRepository;
+import com.apiharas.webharas.repository.UserRepository;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +23,7 @@ import java.util.*;
 @Slf4j
 public class CavaloServiceImplements implements CavaloService {
     private final CavaloRepository cavaloRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Cavalo saveCavalo(Cavalo cavalo) {
@@ -53,4 +60,21 @@ public class CavaloServiceImplements implements CavaloService {
         log.info("Buscando cavalos");
         return cavaloRepository.findByFilterParams(cidade, genero, raca, pelagem);
     }
+
+    @Override
+    public List<Cavalo> getCavalosByUser(String authorizationHeader) {
+        String refresh_token = authorizationHeader.substring("Bearer ".length());
+        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT decodedJWT = verifier.verify(refresh_token);
+        String username = decodedJWT.getSubject();
+        User user = getUser(username);
+        List<Cavalo> cavalos = cavaloRepository.findByUserId(user.getId());
+        return cavalos;
+    }
+
+    private User getUser(String userName) {
+        return userRepository.findByUsername(userName).get();
+    }
+
 }

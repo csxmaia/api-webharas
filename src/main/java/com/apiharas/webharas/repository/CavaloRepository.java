@@ -27,4 +27,5 @@ public interface CavaloRepository extends JpaRepository<Cavalo, Long> {
         @Param("pelagemId") Long pelagemId
     );
 
+    List<Cavalo> findByUserId(Long id);
 }

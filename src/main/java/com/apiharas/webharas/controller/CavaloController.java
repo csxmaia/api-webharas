@@ -8,9 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,6 +45,17 @@ public class CavaloController {
             }else {
                 return ResponseEntity.ok().body(cavaloService.getCavalos());
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/cavalosByUser")
+    public ResponseEntity<List<Cavalo>> getCavalosByUser(HttpServletRequest request) {
+        try {
+            String authorizationHeader = request.getHeader(AUTHORIZATION);
+            return ResponseEntity.ok().body(cavaloService.getCavalosByUser(authorizationHeader));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
