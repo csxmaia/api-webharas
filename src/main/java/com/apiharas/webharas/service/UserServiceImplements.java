@@ -39,7 +39,7 @@ public class UserServiceImplements implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findByUsername(username);
         if(user == null){
             log.error("User não encontrado no banco de dados");
             throw new UsernameNotFoundException("User não encontrado no banco de dados");
@@ -48,11 +48,11 @@ public class UserServiceImplements implements UserService, UserDetailsService {
         }
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach(r -> {
+        user.get().getRoles().forEach(r -> {
             authorities.add(new SimpleGrantedAuthority(r.getNome()));
         });
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(user.get().getUsername(), user.get().getPassword(), authorities);
     }
 
     @Override
@@ -71,9 +71,27 @@ public class UserServiceImplements implements UserService, UserDetailsService {
     @Override
     public void addRoleToUser(String userName, String roleName) {
         log.info("Adicionando papel {} para usuário {}", roleName, userName);
-        User user = userRepository.findByUsername(userName);
+        Optional<User> user = userRepository.findByUsername(userName);
         Role role = roleRepository.findByNome(roleName);
-        user.getRoles().add(role);
+        user.get().getRoles().add(role);
+    }
+
+    public User login(User userVO) {
+        User userResponse = new User();
+        Optional<User> user = userRepository.findByUsername(userVO.getUsername());
+        if(user.isPresent()) {
+            if(passwordEncoder.matches(userVO.getPassword(), user.get().getPassword())) {
+                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                String access_token = JWT.create()
+                        .withSubject(user.get().getUsername())
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 10 *60 * 1000))
+                        .withClaim("roles", user.get().getRoles().stream().map(Role::getNome).collect(Collectors.toList()))
+                        .sign(algorithm);
+                userResponse.setJwt(access_token);
+                return userResponse;
+            };
+        }
+        return userResponse;
     }
 
     @Override
@@ -113,7 +131,7 @@ public class UserServiceImplements implements UserService, UserDetailsService {
     @Override
     public User getUser(String userName) {
         log.info("Buscando usuário {}",userName);
-        return userRepository.findByUsername(userName);
+        return userRepository.findByUsername(userName).get();
     }
 
     @Override

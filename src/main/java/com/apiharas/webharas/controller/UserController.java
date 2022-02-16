@@ -50,6 +50,11 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/user/login")
+    public ResponseEntity<User> login(@RequestBody User user, HttpServletResponse response) {
+        return ResponseEntity.ok().body(userService.login(user));
+    }
+
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);

@@ -50,4 +50,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
+
+    @Transient
+    private String jwt;
 }

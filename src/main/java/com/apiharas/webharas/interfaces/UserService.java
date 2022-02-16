@@ -13,5 +13,6 @@ public interface UserService {
     void addRoleToUser(String userName, String roleName);
     void refreshToken(String authorizationHeader, HttpServletRequest request, HttpServletResponse response) throws IOException;
     User getUser(String userName);
+    User login(User user);
     List<User> getUsers();
 }
