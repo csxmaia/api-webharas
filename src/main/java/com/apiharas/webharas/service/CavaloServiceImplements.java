@@ -32,11 +32,19 @@ public class CavaloServiceImplements implements CavaloService {
         User user = getUser(authorizationHeader);
         cavalo.setUser(user);
         if (cavalo.getId() == null) {
-            log.info("Salvando novo cavalo {} no banco de dados", cavalo.getNome());
-            return cavaloRepository.save(cavalo);
+            Cavalo cavaloSaved = cavaloRepository.save(cavalo);
+            cavaloSaved.getImagens().forEach(imagem -> {
+                imagem.setCavalo(cavaloSaved);
+            });
+            imagemRepository.saveAll(cavaloSaved.getImagens());
+            return cavaloSaved;
         } else {
-            log.info("Atualizando Estado {} no banco de dados", cavalo.getNome());
-            return cavaloRepository.save(cavalo);
+            Cavalo cavaloSaved = cavaloRepository.save(cavalo);
+            cavaloSaved.getImagens().forEach(imagem -> {
+                imagem.setCavalo(cavaloSaved);
+            });
+            imagemRepository.saveAll(cavaloSaved.getImagens());
+            return cavaloSaved;
         }
     }
 
